@@ -48,7 +48,7 @@ module.exports = {
     {
       use: '@gridsome/source-filesystem',
       options: {
-        baseDir: './content',
+        baseDir: './content/',
         path: '**/*.md',
         typeName: 'MarkdownPage',
         remark: {
