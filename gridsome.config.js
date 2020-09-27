@@ -17,7 +17,7 @@ module.exports = {
     github: process.env.URL_GITHUB || false,
     nav: {
       links: [
-        { path: '/docs/', title: 'Docs' }
+        { path: '/github/wikis1/', title: 'Docs' }
       ]
     },
     sidebar: [
@@ -27,17 +27,17 @@ module.exports = {
           {
             title: 'Getting Started',
             items: [
-              '/docs/',
-              '/docs/installation/',
-              '/docs/writing-content/',
-              '/docs/deploying/',
+              '/github/wikis1/',
+              '/github/wikis1/installation/',
+              '/github/wikis1/writing-content/',
+              '/github/wikis1/deploying/',
             ]
           },
           {
             title: 'Configuration',
             items: [
-              '/docs/settings/',
-              '/docs/sidebar/',
+              '/github/wikis1/settings/',
+              '/github/wikis1/',
             ]
           }
         ]
@@ -48,7 +48,7 @@ module.exports = {
     {
       use: '@gridsome/source-filesystem',
       options: {
-        baseDir: './content/',
+        baseDir: '~/wikis/',
         path: '**/*.md',
         typeName: 'MarkdownPage',
         remark: {

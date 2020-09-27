@@ -1,8 +1,8 @@
 ---
 description: ''
 sidebar: 'docs'
-prev: '/docs/installation/'
-next: '/docs/settings/'
+prev: '/github/wikis1/installation/'
+next: '/github/wikis1/settings/'
 ---
 
 # Writing Content

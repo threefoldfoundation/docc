@@ -1,8 +1,8 @@
 ---
 description: ''
 sidebar: 'docs'
-prev: '/docs/deploying/'
-next: '/docs/sidebar/'
+prev: '/github/wikis1/sidebar/'
+
 ---
 
 # Settings
@@ -12,7 +12,7 @@ When creating your markdown files, there is some configuration to do, if we want
 ## Sidebar
 
 The sidebar, unfortunately, is not generated automatically but rather configured in your frontmatter and the `gridsome.config.file`.
-Check out the [sidebar](/docs/sidebar/) section for more information.
+Check out the [sidebar](/github/wikis1/sidebar/) section for more information.
 
 ## Next and Previous Navigation
 
@@ -92,5 +92,4 @@ Read more [here](https://gridsome.org/plugins/@gridsome/plugin-google-analytics)
 // ...
 ```
 
-![](./img/a.png)
-
+![](/wikis2/a.png)

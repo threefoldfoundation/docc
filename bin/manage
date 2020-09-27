@@ -1,0 +1,62 @@
+#!/usr/bin/env python3
+
+from distutils.dir_util import copy_tree
+import argparse
+import subprocess
+import os
+import shlex
+
+VERSION = "1.0"
+
+parser = argparse.ArgumentParser()
+parser.add_argument("-v", "--version", action="version", version='%(prog)s {}'.format(VERSION), help="Display version")
+parser.add_argument("-c", "--collect-static", action="store_true", default=False, dest="collect_static", help="Collect static files")
+parser.add_argument("-d", "--develop", action="store_true", default=False, dest="develop", help="Run dev server")
+parser.add_argument("-b", "--build", action="store_true", default=False, dest="build", help="Build web App")
+
+
+args = parser.parse_args()
+
+
+def develop():
+    os.system("gridsome develop")
+
+
+def build():
+    os.system("gridsome build")
+
+
+def collect_static():
+    print("Collecting Static files")
+    path = os.path.join(os.path.abspath(os.path.dirname(__file__)), "gridsome.config.js")
+    proc = subprocess.Popen(["grep", "-Eo", "baseDir:.*", "{}".format(path)], stdout=subprocess.PIPE)
+    (out, err) = proc.communicate()
+    root = out.decode().rstrip(",\n").lstrip("baseDir: ").strip().strip('"').strip("'")
+    root = os.path.expanduser(root)
+
+    static_dirs = {}
+    for root, subdirs, files in os.walk(root):
+        if 'static' in subdirs:
+            static_dirs[os.path.basename(root).replace("_", "-")]= os.path.join(root, 'static')
+    
+    static = os.path.join(os.path.abspath(os.path.dirname(__file__)), "static")
+
+    for k, v in static_dirs.items():
+        # copy subdirectories
+        src = v
+        dest = os.path.join(static, k)
+        copy_tree(src, dest)
+
+help = True
+if args.develop:
+    develop()
+    help = False
+elif args.build:
+    help = False
+    build()
+elif args.collect_static:
+    help = False
+    collect_static()
+if help:
+    parser.print_help()
+

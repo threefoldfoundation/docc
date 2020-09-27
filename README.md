@@ -1,80 +1,56 @@
 ## Installation
 
-### Install [Gridsome CLI tool](https://gridsome.org/docs/#1-install-gridsome-cli-tool)
+### Install pubtools
 
-- **Using YARN**  `yarn global add @gridsome/cli`
-- **Using NPM**   `npm install --global @gridsome/cli`
-
-## Create your wikis project 
-
-### create a new project using gridsome-cli tools
-```
-gridsome create my-project https://github.com/threefoldfoundation/gridsome-docc
-```
-
-### Run the project for the firt time
-- `cd my-project`
-- `gridsome develop`
-
-### support loading markdown from several repos (example) 
-
-- use example directory `cp -r examples/wikis ~/wikis`
-- Update `gridsome.conf.js` then re-run
+- Install (needs sudo permissions)
   ```
-    nav: {
-          links: [
-            { path: '/github/wikis1/', title: 'Docs' }
-          ]
-        },
-        sidebar: [
-          {
-            name: 'docs',
-            sections: [
-              {
-                title: 'Getting Started',
-                items: [
-                  '/github/wikis1/',
-                  '/github/wikis1/installation/',
-                  '/github/wikis1/writing-content/',
-                  '/github/wikis1/deploying/',
-                ]
-              },
-              {
-                title: 'Configuration',
-                items: [
-                  '/github/wikis1/settings/',
-                  '/github/wikis1/sidebar/',
-                ]
-              }
-            ]
-          }
-        ]
-    ...
+  curl -sL https://raw.githubusercontent.com/threefoldfoundation/gridsome-docc/master/bin/pubtools -o /tmp/pubtools && chmod u+x /tmp/pubtools && /tmp/pubtools -i
+  ```
 
-    plugins: [
-        {
-          use: '@gridsome/source-filesystem',
-          options: {
-            baseDir: '~/wikis/',
-            path: '**/*.md',
-            typeName: 'MarkdownPage',
-            remark: {
-              externalLinksTarget: '_blank',
-              externalLinksRel: ['noopener', 'noreferrer'],
-              plugins: [
-                '@gridsome/remark-prismjs'
-              ]
-            }
-          }
-        },
-    ...
-    ```
+- Run `pubtools`
+
+  ![](docs/img/pubtools.png)
+
+### create a new project
+
+- Create using `pubtools create {project_name} {root}` i.e `pubtools create my-proj ~/wikis`
+- Newly created projects will have the example under `examples` dir copied to root i,e `~/wikis` and working
+
+### Manage projects
+- Inside each project there's a manager file `./manage` 
+
+   ![](docs/img/manage.png)
+
+- commands
+  - `./manage -d` development server
+  - `./manage -b` build project
+  - `./manage -c` Collect static files from `{root}` i.e ~/wikis to local `static` directory inside the project so it can be resolved correctly
 
 ### Support for markdown inclusions
 
 use  `!!!include:$orgname:$reponame:$docname` i.e `!!!include:$github:$wikis2:$settings`  in your marddown page to include another page
 
-## More Documentation
-can be found [here](https://docc-theme.netlify.com/)
+### Notes
+- for each repo in `{root}` i.e `~/wikis/github` there should be a `static` directory which holds all static files for that repo and you should reference images using `![](/{reponame}/a.png)` i.e  for a page in `wiki2` repo to reference static file in `wikis2/static` we do something like `![](/wikis2/a.png)`
+
+### Example (Ruuning wiki2020)
+- Create a new project `pubtools create mywikis ~/wikis`
+- Make sure scaffold example is running `cd mywikis && ./manage -d`
+- Clone wikis2020 
+  - `cd ~/wikis/github && git@github.com:threefoldfoundation/wiki_2020.git`
+  - `cd wiki_2020`
+  - `git checkout pubtools`
+  - Add a new sidebar for the `wiki2020`
+    - Open `wiki2020/gridsome.config.js`
+    - copy `sidebar`, and nav parts into your newly project config file `mywikis/gridsome.config.js`
+  - Run 
+    - Got to your project `cd mywikis`
+    - Collect static files `./manage -c`
+    - Run `./manage -d`
+
+### Docs
+- [Gridsome](https://gridsome.org/)
+- [Gridsome-docc](https://docc-theme.netlify.app/)
+
 
 

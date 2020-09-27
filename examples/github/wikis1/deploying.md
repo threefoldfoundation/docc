@@ -1,8 +1,8 @@
 ---
 description: ''
 sidebar: 'docs'
-prev: '/docs/writing-content/'
-next: '/docs/settings/'
+prev: '/github/wikis1/writing-content/'
+next: '/github/wikis1/settings/'
 ---
 
 # Deploying

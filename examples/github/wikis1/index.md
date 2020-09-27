@@ -1,7 +1,7 @@
 ---
 description: ''
 sidebar: 'docs'
-next: '/docs/installation/'
+next: '/github/wikis1/installation/'
 ---
 
 # Introduction

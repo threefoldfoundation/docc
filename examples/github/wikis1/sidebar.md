@@ -1,7 +1,7 @@
 ---
 description: ''
 sidebar: 'docs'
-prev: '/docs/settings/'
+prev: '/github/wikis1/settings/'
 ---
 
 # Sidebar

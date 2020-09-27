@@ -1,0 +1,84 @@
+#!/usr/bin/env python3
+
+import argparse
+import subprocess
+import os
+import shlex
+
+VERSION = "1.0"
+
+parser = argparse.ArgumentParser()
+parser.add_argument("-v", "--version", action="version", version='%(prog)s {}'.format(VERSION), help="Display version")
+parser.add_argument("-i", "--install", action="store_true", default=False, dest="install", help="Install pubtools")
+parser.add_argument("-r", "--remove", action="store_true", default=False, dest="remove", help="UnInstall pubtools")
+
+subparsers = parser.add_subparsers(help='commands')
+create_parser = subparsers.add_parser('create', help='Create new project')
+create_parser.add_argument("project", action="store", help="Project name")
+create_parser.add_argument("root", action="store", help="Root directory of md files")
+
+args = parser.parse_args()
+
+
+def install():
+    path = os.path.expanduser("~/.pubtools")
+    bashrc = os.path.expanduser("~/.bashrc")
+    curr = os.path.abspath(__file__)
+    subprocess.Popen(shlex.split("mkdir -p {}".format(path)))
+    subprocess.Popen(shlex.split("cp -r {0} {1}".format(curr, path)))
+    os.system("echo 'export PATH=$PATH:/home/hamdy/.pubtools' >> /home/hamdy/.bashrc")
+    subprocess.call(". {}".format(bashrc), shell=True, executable='/bin/bash')
+
+    code = os.system("sudo curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -")
+
+    if not code:
+        code = os.system("sudo apt install -y nodejs")
+
+    if not code:
+        code = os.system("curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -")
+
+    if not code:
+        code = os.system(
+            'echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list')
+
+    if not code:
+        code = os.system("sudo apt-get update && sudo apt-get install -y yarn")
+
+    if not code:
+        code = os.system("yarn global add @gridsome/cli")
+
+    if code:
+        print("failed")
+
+
+def uninstall():
+    path = os.path.expanduser("~/.pubtools")
+    subprocess.Popen(shlex.split("rm -rf {}".format(path)))
+
+
+def create(project, root):
+    root = root.rstrip("/").replace("/", "\/")
+    os.system("gridsome create {0} https://github.com/threefoldfoundation/gridsome-docc && cd {1}".format(project, project))
+    os.system("""sed -i 's/baseDir:.*/baseDir: "{0}\/",/g' {1}/gridsome.config.js""".format(root, project))
+    os.system("cp {0}/bin/manage {1}".format(project, project))
+    os.system("mkdir -p {0}/static/img".format(project))
+    os.system("mkdir -p {0}/github/".format(root))
+    os.system("cp -r {0}/examples/* {1}".format(project, root))
+    # collect static for example
+    curr = os.path.join(os.path.dirname(__file__))
+    os.system("cd {0} && ./manage -c".format(project))
+
+help = True
+if 'project' in args:
+    create(args.project, args.root)
+    help = False
+elif args.install:
+    install()
+    help = False
+elif args.remove:
+    help = False
+    uninstall()
+
+if help:
+    parser.print_help()
+
